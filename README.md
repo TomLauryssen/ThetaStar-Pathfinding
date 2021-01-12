@@ -46,3 +46,6 @@ Theta* is designed to be better version of A*. It does this by trying to find sh
 --picture
 
 In my test, A* proved to be the fastest of the two. Visually there was no difference since the grid is so small, and there aren’t many connections which Theta* can take advantage of.
+
+## Conclusion
+While A* star might not always be the shortest path, it will give you good results combined with good speed. If you really need the shortest path use Theta*. It might be slower than A* in some cases it will give the best results.
