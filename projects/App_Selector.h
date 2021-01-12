@@ -1,4 +1,4 @@
 #pragma once
 //Register the app in main.cpp
-//#define AStar
-#define ThetaStar
+#define AStar
+//#define ThetaStar

@@ -76,6 +76,7 @@ void App_PathfindingThetaStar::Update(float deltaTime)
 		auto startNode = m_pGridGraph->GetNode(startPathIdx);
 		auto endNode = m_pGridGraph->GetNode(endPathIdx);
 
+
 		auto ThetaStarPathfinder = ThetaStar<GridTerrainNode, GraphConnection>(m_pGridGraph, m_pHeuristicFunction);
 
 		m_vPath = ThetaStarPathfinder.FindPath(startNode, endNode);
