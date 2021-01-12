@@ -35,7 +35,7 @@ namespace Elite
 	private:
 		float GetHeuristicCost(T_NodeType* pStartNode, T_NodeType* pEndNode) const;
 
-		void CheckNextNodeNeighbor(T_NodeType* nextnode);
+		void CheckNextNodeNeighbor(T_NodeType* nextnode, T_NodeType* pGoalNode, float g, std::vector<NodeRecord>& openList, std::vector<NodeRecord>& closedList);
 
 		IGraph<T_NodeType, T_ConnectionType>* m_pGraph;
 		Heuristic m_HeuristicFunction;
@@ -111,6 +111,7 @@ namespace Elite
 				if (isValid)
 				{
 					openList.push_back(NodeRecord{ nextNode, con, G, GetHeuristicCost(nextNode, pGoalNode) + G });
+					CheckNextNodeNeighbor(nextNode,pGoalNode, G, openList, closedList);
 				}
 			}
 			
@@ -153,11 +154,58 @@ namespace Elite
 		Vector2 toDestination = m_pGraph->GetNodePos(pEndNode) - m_pGraph->GetNodePos(pStartNode);
 		return m_HeuristicFunction(abs(toDestination.x), abs(toDestination.y));
 	}
+
 	template<class T_NodeType, class T_ConnectionType>
-	inline void ThetaStar<T_NodeType, T_ConnectionType>::CheckNextNodeNeighbor(T_NodeType* nextnode)
+	inline void ThetaStar<T_NodeType, T_ConnectionType>::CheckNextNodeNeighbor(T_NodeType* nextnode, T_NodeType* pGoalNode, float g, std::vector<NodeRecord>& openList, std::vector<NodeRecord>& closedList)
 	{
+		for (const auto& con : m_pGraph->GetNodeConnections(nextnode->GetIndex()))
+		{
+			T_NodeType* neighbor = m_pGraph->GetNode(con->GetTo());
+			float neighborCost = g + con->GetCost();
 
+			bool isValid{ true };
 
+			float currentHeuristicCost = GetHeuristicCost(nextnode, pGoalNode);
+			float nextHeuristicCost = GetHeuristicCost(neighbor, pGoalNode);
 
+			if (currentHeuristicCost < nextHeuristicCost)
+			{
+				return;
+			}
+			for (size_t i = 0; i < closedList.size(); i++)
+			{
+				if (closedList[i].pNode == neighbor)
+				{
+					//if (neighborCost <= closedList[i].costSoFar)
+					//{
+					//	closedList.erase(closedList.begin() + i);
+					//}
+					//else
+					//{
+					//	isValid = false;
+					//}
+					isValid = false;
+				}
+			}
+			for (size_t i = 0; i < openList.size(); i++)
+			{
+				if (openList[i].pNode == neighbor)
+				{
+					//if (neighborCost <= openList[i].costSoFar)
+					//{
+					//	openList.erase(openList.begin() + i);
+					//}
+					//else
+					//{
+					//	isValid = false;
+					//}
+					isValid = false;
+				}
+			}
+			if (isValid)
+			{
+				openList.push_back(NodeRecord{ neighbor, con, neighborCost, nextHeuristicCost + neighborCost });
+			}
+		}
 	}
 }
