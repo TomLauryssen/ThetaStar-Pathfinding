@@ -7,19 +7,18 @@ In Theta* we check the same nodes as in A*, but we go one step further. When we 
 
 --picture
 
-
 ## Implementation
 
 The project is grid-based. This means there is a list of nodes, every node has a connection with its neighbour. The neighbours can be in the horizontal, vertical and diagonal directions. The map also has walls. These walls affect the nodes and their connections. If a wall is a neighbour for a node, the node cannot have a connection with the wall. This means that when we calculate the Theta* path, the path will evade the walls.
 
---picture
+![Grid](Grid.JPG)
 
 ### A*
 In order to understand Theta* knowledge about A* is required. In A* star we calculate a path with knowing the startnode and the endnode.
 
 We define a noderecord that keeps track of the node, its connection with the previous node, an accumulated cost of the distance travelled so far and a heuristic cost. The heuristic cost is the estimated cost we must travel form the node to the endnode. We then create 2 lists: an open list and a closed list. These lists will contain the noderecords. The open list contains noderecords we will check in order to create a path. The closed list contains those we need to form our path.
 
---picture
+![Lists](lists.JPG)
 
 To start off, we create a noderecord with the startnode and the heuristic cost form the startnode to the endnode. We add this noderecord to the open list. This means we can do a loop while the openlist is not empty. In this loop we select a noderecord with smallest heuristic cost from the open list.
 
@@ -43,7 +42,7 @@ _*Nneighbour = neighbour’s neighbour_
 
 Theta* is designed to be better version of A*. It does this by trying to find shorter path’s between nodes, but that means that sometimes it could take longer to calculate that path. This I saw in a test I set up. I calculated the path 10 times for both A* and Theta*
 
---picture
+![Test environment](test.JPG)
 
 In my test, A* proved to be the fastest of the two. Visually there was no difference since the grid is so small, and there aren’t many connections which Theta* can take advantage of.
 
