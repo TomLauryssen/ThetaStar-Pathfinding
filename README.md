@@ -39,7 +39,7 @@ Yet when we do have a neighbour we can check if our accumulated cost to our Nnei
 
 _*Nneighbour = neighbour’s neighbour_
 
-##Results
+## Results
 
 Theta* is designed to be better version of A*. It does this by trying to find shorter path’s between nodes, but that means that sometimes it could take longer to calculate that path. This I saw in a test I set up. I calculated the path 10 times for both A* and Theta*
 
