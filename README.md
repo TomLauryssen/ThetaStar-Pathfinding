@@ -5,7 +5,7 @@ As you all know a lot of pathfinding algorithms exist already. The most common o
 
 In Theta* we check the same nodes as in A*, but we go one step further. When we consider our next Node to add to our path, we check if there is a neighbour that is closer to our goal and that has a line of sight of the node we are coming from. If this is the case, that would allow our path to go directly from one node to the next node’s neighbour. On a grid this will mean it will shorten the distance the player has to travel.
 
---picture
+![Theta* example](thetastar.png)
 
 ## Implementation
 
