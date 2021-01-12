@@ -35,7 +35,7 @@ namespace Elite
 	private:
 		float GetHeuristicCost(T_NodeType* pStartNode, T_NodeType* pEndNode) const;
 
-		void CheckNextNodeNeighbor(T_NodeType* nextnode, T_NodeType* pGoalNode, float g, std::vector<NodeRecord>& openList, std::vector<NodeRecord>& closedList);
+		bool CheckNextNodeNeighbor(NodeRecord currentRecord, T_NodeType* nextnode, T_NodeType* pGoalNode, float g, std::vector<NodeRecord>& openList, std::vector<NodeRecord>& closedList);
 
 		IGraph<T_NodeType, T_ConnectionType>* m_pGraph;
 		Heuristic m_HeuristicFunction;
@@ -110,8 +110,10 @@ namespace Elite
 				}
 				if (isValid)
 				{
-					openList.push_back(NodeRecord{ nextNode, con, G, GetHeuristicCost(nextNode, pGoalNode) + G });
-					CheckNextNodeNeighbor(nextNode,pGoalNode, G, openList, closedList);
+					if (!CheckNextNodeNeighbor(currentRecord, nextNode, pGoalNode, G, openList, closedList))
+					{
+						openList.push_back(NodeRecord{ nextNode, con, G, GetHeuristicCost(nextNode, pGoalNode) + G });
+					}
 				}
 			}
 			
@@ -156,56 +158,35 @@ namespace Elite
 	}
 
 	template<class T_NodeType, class T_ConnectionType>
-	inline void ThetaStar<T_NodeType, T_ConnectionType>::CheckNextNodeNeighbor(T_NodeType* nextnode, T_NodeType* pGoalNode, float g, std::vector<NodeRecord>& openList, std::vector<NodeRecord>& closedList)
+	inline bool ThetaStar<T_NodeType, T_ConnectionType>::CheckNextNodeNeighbor(NodeRecord currentRecord, T_NodeType* nextnode, T_NodeType* pGoalNode, float g, std::vector<NodeRecord>& openList, std::vector<NodeRecord>& closedList)
 	{
-		for (const auto& con : m_pGraph->GetNodeConnections(nextnode->GetIndex()))
+		for (const auto& neighborCon : m_pGraph->GetNodeConnections(nextnode->GetIndex()))
 		{
-			T_NodeType* neighbor = m_pGraph->GetNode(con->GetTo());
-			float neighborCost = g + con->GetCost();
+			T_NodeType* neighbor = m_pGraph->GetNode(neighborCon->GetTo());
 
-			bool isValid{ true };
-
-			float currentHeuristicCost = GetHeuristicCost(nextnode, pGoalNode);
-			float nextHeuristicCost = GetHeuristicCost(neighbor, pGoalNode);
-
-			if (currentHeuristicCost < nextHeuristicCost)
+			bool hasNeighbourConnection = false;
+			for (const auto& con : m_pGraph->GetNodeConnections(currentRecord.pNode->GetIndex()))
 			{
-				return;
-			}
-			for (size_t i = 0; i < closedList.size(); i++)
-			{
-				if (closedList[i].pNode == neighbor)
+				if (neighbor == m_pGraph->GetNode(con->GetTo()))
 				{
-					//if (neighborCost <= closedList[i].costSoFar)
-					//{
-					//	closedList.erase(closedList.begin() + i);
-					//}
-					//else
-					//{
-					//	isValid = false;
-					//}
-					isValid = false;
+					
+					float newG = currentRecord.costSoFar + con->GetCost();
+					if ((newG) < (g + neighborCon->GetCost()))
+					{
+						for (size_t i = 0; i < openList.size(); i++)
+						{
+							if (openList[i].pNode == neighbor)
+							{
+								openList.erase(openList.begin() + i);
+							}
+						}
+						openList.push_back(NodeRecord{neighbor, con, newG, GetHeuristicCost(neighbor, pGoalNode) + newG });
+						hasNeighbourConnection = true;
+					}
 				}
 			}
-			for (size_t i = 0; i < openList.size(); i++)
-			{
-				if (openList[i].pNode == neighbor)
-				{
-					//if (neighborCost <= openList[i].costSoFar)
-					//{
-					//	openList.erase(openList.begin() + i);
-					//}
-					//else
-					//{
-					//	isValid = false;
-					//}
-					isValid = false;
-				}
-			}
-			if (isValid)
-			{
-				openList.push_back(NodeRecord{ neighbor, con, neighborCost, nextHeuristicCost + neighborCost });
-			}
+			return hasNeighbourConnection;
 		}
+		return false;
 	}
 }

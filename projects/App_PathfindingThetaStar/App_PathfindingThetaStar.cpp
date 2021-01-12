@@ -72,8 +72,7 @@ void App_PathfindingThetaStar::Update(float deltaTime)
 		&& endPathIdx != invalid_node_index
 		&& startPathIdx != endPathIdx)
 	{
-		//BFS Pathfinding
-		//auto pathfinder = BFS<GridTerrainNode, GraphConnection>(m_pGridGraph);
+		//Theta* pathfinding
 		auto startNode = m_pGridGraph->GetNode(startPathIdx);
 		auto endNode = m_pGridGraph->GetNode(endPathIdx);
 
