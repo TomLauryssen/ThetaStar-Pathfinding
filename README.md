@@ -5,7 +5,7 @@ As you all know a lot of pathfinding algorithms exist already. The most common o
 
 In Theta* we check the same nodes as in A*, but we go one step further. When we consider our next Node to add to our path, we check if there is a neighbour that is closer to our goal and that has a line of sight of the node we are coming from. If this is the case, that would allow our path to go directly from one node to the next node’s neighbour. On a grid this will mean it will shorten the distance the player has to travel.
 
-![Theta* example](thetastar.png)
+![Theta* example](ThetaExample..PNG)
 
 ## Implementation
 
@@ -52,5 +52,5 @@ While A* star might not always be the shortest path, it will give you good resul
 
 ### Image Reference
 
-_AnonymousEditor 2016, "The path found by A* on an octile grid vs. the shortest path between the start and goal nodes.", Wikipedia, 13 January 2021,_ <https://en.wikipedia.org/wiki/Any-angle_path_planning#/media/File:Shortest_path_vs_A*_on_octile_grid.png>
+Kenny Daniel, Alex Nash, Sven Koenig, Ariel Felner 2014, "Theta*: Any-Angle Path Planning on Grids", Cornell University, 13 January 2021,_ <https://arxiv.org/ftp/arxiv/papers/1401/1401.3843.pdf>
 
